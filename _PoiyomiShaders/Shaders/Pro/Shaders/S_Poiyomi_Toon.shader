@@ -3,7 +3,7 @@
     Properties
     {
         [HideInInspector] shader_is_using_thry_editor ("", Float) = 0
-        [HideInInspector] shader_master_label ("<color=#E75898ff>Poiyomi Toon V7.3.046</color>", Float) = 0
+        [HideInInspector] shader_master_label ("<color=#E75898ff>Poiyomi Toon V7.3.046</color><color=#ff8000ff> Adjerry91 Custom</color>", Float) = 0
         [HideInInspector] shader_presets ("poiToonPresets", Float) = 0
         [HideInInspector] shader_properties_label_file ("7PlusLabels", Float) = 0
         
@@ -792,6 +792,13 @@
         [Enum(Bass, 0, Low Mid, 1, High Mid, 2, Treble, 3)] _AudioLinkEmissionCenterOutAddBand ("Center Out A Band", Int) = 0
         [Vector2]_AudioLinkAddEmission ("Emission Strength Add", Vector) = (0, 0, 0, 0)
         [Enum(Bass, 0, Low Mid, 1, High Mid, 2, Treble, 3)] _AudioLinkAddEmissionBand ("Emission Add Band", Int) = 0
+        //----------Jerry Custom Audio Link----------
+        [Helpbox(1)] _JerryAudioLink ("Jerry Audio Link", Int) = 0
+        [Enum(OFF, 0, STREAM 1, 1, STREAM 2, 2, STREAM 3, 3, STREAM 4, 4, STREAM 5, 5)] _AudioLinkCCCOLORS ("CCCOLORS", Int) = 0         
+        [Enum(Replace, 0, Multiplicative, 1, Additive, 2)] _AudioLinkCCCOLORS_Blend ("CCCOLORS Blend Mode", Int) = 0    
+        _AudioLinkCCLIGHTS("CCLIGHTS", range(0,128)) = 0  
+        [Enum(Replace, 0, Multiplicative, 1, Additive, 2, UV Grid, 3)] _AudioLinkCCLIGHTS_Blend ("CCLIGHTS Blend Mode", Int) = 0  
+        //-------------------------------------------
         [HideInInspector] m_end_EmissionAudioLink ("Audio Link", Float) = 0
         [HideInInspector] m_end_emissionOptions ("Emission / Glow", Float) = 0
 

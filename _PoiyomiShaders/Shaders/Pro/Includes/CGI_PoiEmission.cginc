@@ -92,6 +92,12 @@ float _EmissionScrollingUseCurve1;
     half _AudioLinkAddEmissionBand;
     float2 _EmissionCenterOutAddAudioLink;
     half _AudioLinkEmissionCenterOutAddBand;
+    // ---------Jerry Custom--------
+    half _AudioLinkCCCOLORS;    
+    half _AudioLinkCCCOLORS_Blend;   
+    half _AudioLinkCCLIGHTS;    
+    half _AudioLinkCCLIGHTS_Blend;  
+    //------------------------------
 
     half _EnableEmission1StrengthAudioLink;
     half _AudioLinkEmission1StrengthBand;
@@ -212,6 +218,48 @@ float3 calculateEmissionNew(in float3 baseColor, inout float4 finalColor)
     {
         emissionStrength0 *= calculateBlinkingEmission(_EmissiveBlink_Min, _EmissiveBlink_Max, _EmissiveBlink_Velocity, _EmissionBlinkingOffset);
     }
+    
+    //CUSTOM Audio Link Color Control
+    #ifdef POI_AUDIOLINK
+        UNITY_BRANCH        
+        if (poiMods.audioLinkTextureExists)
+        {   
+            if (_AudioLinkCCCOLORS)
+            {
+                if(_AudioLinkCCCOLORS_Blend==0)      //Replace
+                {
+                   emissionColor0 = AudioLinkData( ALPASS_CCCOLORS + int2( _AudioLinkCCCOLORS, 0) ).rgb;
+                }
+                else if(_AudioLinkCCCOLORS_Blend==1) //Multiplicative
+                {
+                   emissionColor0 *= AudioLinkData( ALPASS_CCCOLORS + int2( _AudioLinkCCCOLORS, 0) ).rgb;
+                }
+                else if(_AudioLinkCCCOLORS_Blend==2) //Additive
+                {
+                   emissionColor0 += AudioLinkData( ALPASS_CCCOLORS + int2( _AudioLinkCCCOLORS, 0) ).rgb;
+                }
+            }
+            if (_AudioLinkCCLIGHTS)
+            {   
+                if(_AudioLinkCCLIGHTS_Blend==0)          //Replace
+                {
+                    emissionColor0 = AudioLinkData( ALPASS_CCLIGHTS + int2( _AudioLinkCCLIGHTS - 1, 0) ).rgb;
+                }
+                else if(_AudioLinkCCLIGHTS_Blend==1)     //Multiplicative
+                {
+                    emissionColor0 *= AudioLinkData( ALPASS_CCLIGHTS + int2( _AudioLinkCCLIGHTS - 1, 0) ).rgb;
+                }
+                else if(_AudioLinkCCLIGHTS_Blend==2)     //Additive
+                {
+                    emissionColor0 += AudioLinkData( ALPASS_CCLIGHTS + int2( _AudioLinkCCLIGHTS - 1, 0) ).rgb;
+                }
+                else if(_AudioLinkCCLIGHTS_Blend==3)    //UV Grid
+                {
+                    emissionColor0 *= AudioLinkData( ALPASS_CCLIGHTS + uint2( uint(poiMesh.uv[_EmissionMapUV].x * 8 * (_AudioLinkCCLIGHTS/128)) + uint(poiMesh.uv[_EmissionMapUV].y * 16 * (_AudioLinkCCLIGHTS/128)) * 8, 0) ).rgb;
+                }
+            }
+        }
+    #endif
     
     emissionColor0 = hueShift(emissionColor0, frac(_EmissionHueShift + _EmissionHueShiftSpeed * _Time.x) * _EmissionHueShiftEnabled);
     
